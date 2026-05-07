@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duniaku - Kartu Ucapan 3D</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #000;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        #canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .ui {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .title {
+            text-align: center;
+            color: white;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            animation: fadeIn 2s ease-in;
+        }
+
+        .title h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ff1493, #00bfff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .title p {
+            font-size: 1.2em;
+            color: #00bfff;
+        }
+
+        .controls {
+            text-align: center;
+            color: #00ff00;
+            pointer-events: auto;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #00bfff;
+        }
+
+        .controls p {
+            margin: 10px 0;
+            font-size: 1em;
+        }
+
+        .message {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: white;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px 40px;
+            border-radius: 10px;
+            border: 2px solid #ff1493;
+            pointer-events: auto;
+            max-width: 80%;
+            animation: slideUp 1s ease-out 2s both;
+        }
+
+        .message h2 {
+            font-size: 1.5em;
+            color: #ff1493;
+            margin-bottom: 10px;
+        }
+
+        .message p {
+            font-size: 1.1em;
+            line-height: 1.5;
+            color: #00bfff;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        .info {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #00ff00;
+            font-size: 0.9em;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: 1px solid #00ff00;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <div class="ui">
+        <div class="title">
+            <h1>🌍 DUNIAKU 🌍</h1>
+            <p>Navigasi dengan mouse • Zoom dengan scroll</p>
+        </div>
+
+        <div class="message">
+            <h2>💕 Untuk Orang Spesial 💕</h2>
+            <p>Di tengah galaksi yang luas ini, kamu adalah planet yang paling terang.</p>
+            <p>Terima kasih telah membuat hidupku penuh warna seperti bintang-bintang.</p>
+        </div>
+
+        <div class="controls">
+            <p>🖱️ Drag untuk memutar</p>
+            <p>🔍 Scroll untuk zoom</p>
+            <p>✨ Klik planet untuk info</p>
+        </div>
+    </div>
+
+    <div class="info">
+        <p>Foto Mode - Asteroid = Foto Kenangan</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Setup Scene
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('canvas'), antialias: true, alpha: true });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x000000);
+        camera.position.z = 150;
+
+        // Stars Background
+        function createStars() {
+            const starsGeometry = new THREE.BufferGeometry();
+            const starsMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 2 });
+            
+            const starsVertices = [];
+            for (let i = 0; i < 10000; i++) {
+                const x = (Math.random() - 0.5) * 4000;
+                const y = (Math.random() - 0.5) * 4000;
+                const z = (Math.random() - 0.5) * 4000;
+                starsVertices.push(x, y, z);
+            }
+            
+            starsGeometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(starsVertices), 3));
+            const stars = new THREE.Points(starsGeometry, starsMaterial);
+            scene.add(stars);
+        }
+
+        createStars();
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+
+        const pointLight = new THREE.PointLight(0xffffff, 1);
+        pointLight.position.set(50, 50, 50);
+        scene.add(pointLight);
+
+        // Planets Group
+        const planetsGroup = new THREE.Group();
+        scene.add(planetsGroup);
+
+        // Function to create planet texture with canvas
+        function createPlanetTexture(color, text = '') {
+            const canvas = document.createElement('canvas');
+            canvas.width = 512;
+            canvas.height = 512;
+            const ctx = canvas.getContext('2d');
+
+            // Draw planet
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(256, 256, 256, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw text if provided
+            if (text) {
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 40px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(text, 256, 256);
+            }
+
+            // Add some texture
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+            for (let i = 0; i < 100; i++) {
+                const x = Math.random() * 512;
+                const y = Math.random() * 512;
+                const size = Math.random() * 5;
+                ctx.fillRect(x, y, size, size);
+            }
+
+            return new THREE.CanvasTexture(canvas);
+        }
+
+        // Function to create planet with orbit
+        function createPlanet(size, color, distance, speed, text = '') {
+            const geometry = new THREE.SphereGeometry(size, 32, 32);
+            const material = new THREE.MeshPhongMaterial({ map: createPlanetTexture(color, text) });
+            const planet = new THREE.Mesh(geometry, material);
+
+            const orbit = {
+                distance: distance,
+                speed: speed,
+                angle: Math.random() * Math.PI * 2,
+                mesh: planet
+            };
+
+            planetsGroup.add(planet);
+            return orbit;
+        }
+
+        // Create planets
+        const orbits = [
+            createPlanet(8, '#888888', 30, 0.004, '☿'),      // Mercury
+            createPlanet(14, '#FFA500', 50, 0.0015, '♀'),     // Venus
+            createPlanet(15, '#00BFFF', 80, 0.001, 'DUNIAKU'), // Earth - Main planet!
+            createPlanet(10, '#FF6347', 110, 0.0008, '♂'),    // Mars
+            createPlanet(25, '#DAA520', 160, 0.0003, '♃'),    // Jupiter
+            createPlanet(20, '#FFD700', 210, 0.0001, '♄')     // Saturn
+        ];
+
+        // Create orbit lines
+        function createOrbitLine(distance) {
+            const points = [];
+            for (let i = 0; i <= 64; i++) {
+                const angle = (i / 64) * Math.PI * 2;
+                points.push(
+                    new THREE.Vector3(Math.cos(angle) * distance, 0, Math.sin(angle) * distance)
+                );
+            }
+            const geometry = new THREE.BufferGeometry().setFromPoints(points);
+            const material = new THREE.LineBasicMaterial({ color: 0x00ff00, transparent: true, opacity: 0.2 });
+            const line = new THREE.Line(geometry, material);
+            planetsGroup.add(line);
+        }
+
+        orbits.forEach(orbit => createOrbitLine(orbit.distance));
+
+        // Asteroids as photo frames (menggunakan data URL placeholder)
+        function createPhotoAsteroid(x, y, z, photoIndex) {
+            const size = Math.random() * 2 + 1;
+            const geometry = new THREE.BoxGeometry(size, size, size);
+            
+            // Create simple photo texture
+            const canvas = document.createElement('canvas');
+            canvas.width = 128;
+            canvas.height = 128;
+            const ctx = canvas.getContext('2d');
+            
+            // Warna random untuk setiap foto
+            const colors = ['#FF69B4', '#00CED1', '#FFD700', '#FF6347', '#32CD32'];
+            ctx.fillStyle = colors[photoIndex % colors.length];
+            ctx.fillRect(0, 0, 128, 128);
+            
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 30px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('📷', 64, 64);
+            
+            const material = new THREE.MeshPhongMaterial({ map: new THREE.CanvasTexture(canvas) });
+            const asteroid = new THREE.Mesh(geometry, material);
+            
+            asteroid.position.set(x, y, z);
+            asteroid.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+            
+            return asteroid;
+        }
+
+        // Add asteroids (foto kenangan)
+        const asteroidGroup = new THREE.Group();
+        planetsGroup.add(asteroidGroup);
+
+        for (let i = 0; i < 50; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 120 + Math.random() * 40;
+            const height = (Math.random() - 0.5) * 80;
+            
+            const x = Math.cos(angle) * distance;
+            const z = Math.sin(angle) * distance;
+            
+            const asteroid = createPhotoAsteroid(x, height, z, i);
+            asteroidGroup.add(asteroid);
+        }
+
+        // Mouse controls
+        let mouseDown = false;
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetRotationX = 0;
+        let targetRotationY = 0;
+
+        document.addEventListener('mousedown', (e) => {
+            mouseDown = true;
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (mouseDown) {
+                const deltaX = e.clientX - mouseX;
+                const deltaY = e.clientY - mouseY;
+                
+                targetRotationY += deltaX * 0.01;
+                targetRotationX += deltaY * 0.01;
+                
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            mouseDown = false;
+        });
+
+        // Zoom control
+        document.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            camera.position.z += e.deltaY * 0.5;
+            camera.position.z = Math.max(50, Math.min(300, camera.position.z));
+        }, { passive: false });
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Smooth rotation
+            planetsGroup.rotation.x += (targetRotationX - planetsGroup.rotation.x) * 0.1;
+            planetsGroup.rotation.y += (targetRotationY - planetsGroup.rotation.y) * 0.1;
+
+            // Animate planets
+            orbits.forEach((orbit, index) => {
+                orbit.angle += orbit.speed;
+                orbit.mesh.position.x = Math.cos(orbit.angle) * orbit.distance;
+                orbit.mesh.position.z = Math.sin(orbit.angle) * orbit.distance;
+                orbit.mesh.rotation.y += 0.005;
+            });
+
+            // Rotate asteroids
+            asteroidGroup.children.forEach(asteroid => {
+                asteroid.rotation.x += 0.01;
+                asteroid.rotation.y += 0.01;
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
