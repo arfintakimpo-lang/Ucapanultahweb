@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Untuk Orang Tersayang ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    overflow:hidden;
+    font-family:'Poppins',sans-serif;
+    background:#000;
+}
+
+/* VIDEO BACKGROUND */
+video{
+    position:fixed;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    z-index:-3;
+}
+
+/* OVERLAY */
+.overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.45);
+    z-index:-2;
+}
+
+/* GLOW */
+.glow{
+    position:fixed;
+    width:500px;
+    height:500px;
+    background:radial-gradient(circle,#ff4d88 0%,transparent 70%);
+    filter:blur(80px);
+    opacity:0.45;
+    animation:moveGlow 8s infinite alternate ease-in-out;
+    z-index:-1;
+}
+
+@keyframes moveGlow{
+    0%{
+        transform:translate(-20%, -10%);
+    }
+    100%{
+        transform:translate(50%, 30%);
+    }
+}
+
+/* CONTENT */
+.container{
+    width:100%;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.card{
+    width:100%;
+    max-width:420px;
+    padding:35px 28px;
+    border-radius:30px;
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(14px);
+    border:1px solid rgba(255,255,255,0.15);
+    text-align:center;
+    color:white;
+    box-shadow:0 0 40px rgba(255,255,255,0.08);
+
+    animation:fadeUp 1.5s ease forwards;
+}
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(50px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.heart{
+    font-size:60px;
+    animation:heartbeat 1.5s infinite;
+    margin-bottom:10px;
+}
+
+@keyframes heartbeat{
+    0%,100%{
+        transform:scale(1);
+    }
+    25%{
+        transform:scale(1.15);
+    }
+    50%{
+        transform:scale(0.95);
+    }
+    75%{
+        transform:scale(1.12);
+    }
+}
+
+.title{
+    font-size:38px;
+    font-weight:700;
+    margin-bottom:18px;
+    background:linear-gradient(90deg,#ff8fb1,#ffd6e0,#ff8fb1);
+    background-size:300%;
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    animation:gradient 5s linear infinite;
+}
+
+@keyframes gradient{
+    0%{
+        background-position:0%;
+    }
+    100%{
+        background-position:300%;
+    }
+}
+
+.text{
+    font-size:15px;
+    line-height:1.9;
+    color:rgba(255,255,255,0.92);
+    margin-bottom:25px;
+}
+
+.highlight{
+    color:#ffb6d0;
+    font-weight:600;
+}
+
+/* BUTTON */
+.btn{
+    border:none;
+    outline:none;
+    padding:14px 28px;
+    border-radius:999px;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.35s;
+    background:linear-gradient(45deg,#ff4d88,#ff8fb1);
+    color:white;
+    box-shadow:0 10px 25px rgba(255,77,136,0.4);
+}
+
+.btn:hover{
+    transform:translateY(-3px) scale(1.04);
+}
+
+/* MUSIC BUTTON */
+.music-btn{
+    position:fixed;
+    top:20px;
+    right:20px;
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    border:none;
+    background:rgba(255,255,255,0.15);
+    color:white;
+    font-size:20px;
+    backdrop-filter:blur(10px);
+    cursor:pointer;
+    z-index:999;
+}
+
+/* FLOATING HEARTS */
+.hearts{
+    position:fixed;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    pointer-events:none;
+}
+
+.hearts span{
+    position:absolute;
+    bottom:-50px;
+    color:rgba(255,255,255,0.75);
+    animation:floatHeart linear infinite;
+}
+
+@keyframes floatHeart{
+    0%{
+        transform:translateY(0) scale(0.8);
+        opacity:0;
+    }
+    10%{
+        opacity:1;
+    }
+    100%{
+        transform:translateY(-110vh) scale(1.4);
+        opacity:0;
+    }
+}
+
+/* RESPONSIVE */
+@media(max-width:500px){
+
+    .title{
+        font-size:30px;
+    }
+
+    .text{
+        font-size:14px;
+    }
+
+    .card{
+        padding:30px 22px;
+    }
+
+}
+
+/* ========================= */
+/* HALAMAN PERTAMA */
+/* ========================= */
+
+.intro-page{
+    position:fixed;
+    inset:0;
+    background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:99999;
+    transition:1s;
+}
+
+.intro-card{
+    width:90%;
+    max-width:350px;
+    padding:35px 25px;
+    border-radius:28px;
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(15px);
+    border:1px solid rgba(255,255,255,0.15);
+    text-align:center;
+    color:white;
+}
+
+.gift{
+    font-size:70px;
+    margin-bottom:15px;
+    animation:heartbeat 2s infinite;
+}
+
+.intro-title{
+    font-size:28px;
+    margin-bottom:10px;
+    font-weight:700;
+}
+
+.intro-text{
+    font-size:14px;
+    opacity:0.85;
+    margin-bottom:28px;
+    line-height:1.7;
+}
+
+.open-btn{
+    border:none;
+    outline:none;
+    padding:14px 35px;
+    border-radius:999px;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    color:white;
+    background:linear-gradient(45deg,#ff4d88,#ff8fb1);
+    box-shadow:0 10px 25px rgba(255,77,136,0.35);
+    transition:0.35s;
+}
+
+.open-btn:hover{
+    transform:scale(1.05);
+}
+
+.hide-intro{
+    opacity:0;
+    visibility:hidden;
+}
+
+/* ========================= */
+/* HALAMAN KETIGA */
+/* ========================= */
+
+.third-page{
+    position:fixed;
+    inset:0;
+
+    background:
+    linear-gradient(
+        135deg,
+        #1a001f,
+        #32004d,
+        #4d0039
+    );
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    z-index:999999;
+
+    opacity:0;
+    visibility:hidden;
+
+    transition:1s ease;
+
+    padding:20px;
+}
+
+.show-third{
+    opacity:1;
+    visibility:visible;
+}
+
+.third-card{
+
+    width:100%;
+    max-width:430px;
+
+    padding:40px 28px;
+
+    border-radius:30px;
+
+    background:rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(16px);
+
+    border:1px solid rgba(255,255,255,0.15);
+
+    text-align:center;
+
+    color:white;
+
+    animation:fadeUp 1s ease;
+}
+
+.love-icon{
+    font-size:70px;
+    margin-bottom:15px;
+    animation:heartbeat 1.5s infinite;
+}
+
+.third-title{
+    font-size:38px;
+    margin-bottom:20px;
+
+    background:
+    linear-gradient(
+        90deg,
+        #ff8fb1,
+        #ffffff,
+        #ff8fb1
+    );
+
+    background-size:300%;
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+
+    animation:gradient 5s linear infinite;
+}
+
+.third-text{
+    line-height:2;
+    font-size:15px;
+    color:rgba(255,255,255,0.92);
+}
+
+.third-highlight{
+    color:#ffb6d0;
+    font-weight:600;
+}
+
+.third-btn{
+
+    margin-top:28px;
+
+    border:none;
+    outline:none;
+
+    padding:14px 35px;
+
+    border-radius:999px;
+
+    font-size:15px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    color:white;
+
+    background:
+    linear-gradient(
+        45deg,
+        #ff4d88,
+        #ff8fb1
+    );
+
+    box-shadow:
+    0 10px 25px rgba(255,77,136,0.35);
+
+    transition:0.35s;
+}
+
+.third-btn:hover{
+    transform:scale(1.05);
+}
+
+.third-page::before{
+    content:'';
+
+    position:absolute;
+    width:100%;
+    height:100%;
+
+    background-image:
+    radial-gradient(white 1px, transparent 1px);
+
+    background-size:40px 40px;
+
+    opacity:0.15;
+
+    animation:moveStars 30s linear infinite;
+}
+
+@keyframes moveStars{
+
+    from{
+        transform:translateY(0);
+    }
+
+    to{
+        transform:translateY(100px);
+    }
+
+}
+  
+</style>
+</head>
+
+<body>
+
+<!-- ========================= -->
+<!-- HALAMAN PERTAMA -->
+<!-- ========================= -->
+
+<div class="intro-page" id="introPage">
+
+    <div class="intro-card">
+
+        <div class="gift">🎁</div>
+
+        <h1 class="intro-title">
+            Ada sesuatu buat kamu
+        </h1>
+
+        <p class="intro-text">
+            pencet tombol di bawah ya 🤍
+        </p>
+
+        <button class="open-btn" onclick="openWebsite()">
+            Buka
+        </button>
+
+    </div>
+
+</div>
+
+<!-- VIDEO BACKGROUND -->
+<video autoplay muted loop playsinline>
+    <source src="https://arfintakimpo-lang.github.io/Ucapanultahweb/ssstik.io_1779349027692.mp4" type="video/mp4">
+</video>
+
+<div class="overlay"></div>
+<div class="glow"></div>
+
+<!-- FLOATING HEART -->
+<div class="hearts" id="hearts"></div>
+
+<!-- MUSIC -->
+<audio id="bgMusic" loop>
+    <source src="https://arfintakimpo-lang.github.io/Ucapanultahweb/ssstik.io_@wonniecats__1779349977645.mp3" type="audio/mp3">
+</audio>
+
+<button class="music-btn" onclick="toggleMusic()">
+    🎵
+</button>
+
+<div class="container">
+    <div class="card">
+
+        <div class="heart">❤️</div>
+
+        <h1 class="title">
+            Masih kesal sama aku?
+        </h1>
+
+        <div class="text">
+            Aku buatin kamu ini, semoga dengan ini rasa kesalmu terhadap aku berkurang
+            <br><br>
+
+            Semangat terus yaa
+            <br>
+
+            <span class="highlight">
+                aku selalu sayang sama kamuu,
+                rindu kamu juga
+            </span>
+
+            <br><br>
+
+            Aku mau jadi orang
+            yang bisa bikin kamu bahagia lagi,
+            bukan bikin kamu terluka lagi.
+
+            <br><br>
+
+            aku bakal berusaha jadi versi terbaik
+            buat kamu. 🤍
+        </div>
+
+        <button class="btn" onclick="acceptLove()">
+            ❤️ pencet ini, aku mau ucapkan terima kasih
+        </button>
+
+    </div>
+</div>
+  
+<div class="third-page" id="thirdPage">
+
+    <div class="third-card">
+
+        <div class="love-icon">💖</div>
+
+        <h1 class="third-title">
+            Terima Kasih 🤍
+        </h1>
+
+        <p class="third-text">
+
+            Makasih karena kamu masih mau
+            buka hati buat aku lagi.
+
+            <br><br>
+
+            Aku bener-bener seneng banget,
+            sampai rasanya duniaku jadi lebih tenang
+            setelah kamu terima aku lagi.
+
+            <br><br>
+
+            Aku tahu mungkin aku belum sempurna,
+            tapi mulai sekarang aku mau belajar
+            jadi seseorang yang lebih baik buat kamu,
+            aku yakin kali ini aku pasti bisa jadi
+            yang terbaik buat kamu
+
+            <br><br>
+
+            karna jujur...
+
+            <br>
+
+            <span class="third-highlight">
+                aku nggak mau kehilangan kamu lagi.
+            </span>
+
+            <br><br>
+
+            kalau mmg kamu masih mau aku menunggu gapapa, aku akan tunggu kamu selalu 🤍
+
+        </p>
+
+        <button class="third-btn" onclick="closeThirdPage()">
+            ❤️ I Love You
+        </button>
+
+    </div>
+
+</div>
+  
+<script>
+
+/* HALAMAN PERTAMA */
+function openWebsite(){
+
+    document
+        .getElementById('introPage')
+        .classList
+        .add('hide-intro');
+
+    music.play();
+
+}
+
+/* FLOATING HEARTS */
+const heartsContainer = document.getElementById('hearts');
+
+function createHeart(){
+
+    const heart = document.createElement('span');
+
+    heart.innerHTML = '❤';
+
+    heart.style.left = Math.random() * 100 + 'vw';
+
+    heart.style.fontSize =
+        (12 + Math.random() * 28) + 'px';
+
+    heart.style.animationDuration =
+        (4 + Math.random() * 6) + 's';
+
+    heartsContainer.appendChild(heart);
+
+    setTimeout(()=>{
+        heart.remove();
+    },10000);
+
+}
+
+setInterval(createHeart,300);
+
+/* MUSIC */
+const music = document.getElementById('bgMusic');
+
+function toggleMusic(){
+
+    if(music.paused){
+        music.play();
+    }else{
+        music.pause();
+    }
+
+}
+
+/* BUTTON */
+function acceptLove(){
+
+    for(let i=0;i<80;i++){
+
+        setTimeout(()=>{
+
+            const conf = document.createElement('div');
+
+            conf.innerHTML = '💖';
+
+            conf.style.position = 'fixed';
+            conf.style.left = Math.random()*100 + 'vw';
+            conf.style.top = '-20px';
+
+            conf.style.fontSize =
+                (15 + Math.random()*25) + 'px';
+
+            conf.style.zIndex = '999';
+
+            conf.style.animation =
+                `floatHeart ${3 + Math.random()*3}s linear forwards`;
+
+            document.body.appendChild(conf);
+
+            setTimeout(()=>{
+                conf.remove();
+            },6000);
+
+        },i*40);
+
+    }
+
+    setTimeout(()=>{
+
+        document
+        .getElementById('thirdPage')
+        .classList
+        .add('show-third');
+
+    },1200);
+
+}
+
+function closeThirdPage(){
+
+    alert("Aku sayang kamu 🤍");
+
+}
+
+</script>
+
+</body>
+</html>
